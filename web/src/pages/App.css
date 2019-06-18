@@ -1,0 +1,35 @@
+.container {
+  overflow: hidden;
+}
+
+.movies-table {
+  table-layout: fixed;
+	overflow-x: auto;
+	width: 100%;
+}
+
+.movies-table td,
+.movies-table th {
+  padding: 10px;
+}
+
+.movies-table tbody tr:nth-child(even) {
+	background-color: lightgray;
+}
+
+.movies-table tr td:nth-child(1),
+.movies-table tr th:nth-child(1) {
+  width: 65%;
+}
+.movies-table tr td:nth-child(2),
+.movies-table tr th:nth-child(2) {
+  text-align: center;
+}
+.movies-table tr td:nth-child(3),
+.movies-table tr th:nth-child(3) {
+  text-align: center;
+}
+.movies-table tr td:nth-child(4),
+.movies-table tr th:nth-child(4) {
+  text-align: center;
+}
