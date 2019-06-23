@@ -1,8 +1,11 @@
 import React, { useRef, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import Sortable from 'sortablejs';
 import PropTypes from 'prop-types';
 import useCheckbox from '../../hooks/useCheckbox';
 import './filters.css';
+import ToggleButton from '../common/toggle-button';
+import Checkbox from '../common/checkbox';
 
 function reorder(array, from, to) {
   array.splice(to, 0, array.splice(from, 1)[0]);
@@ -18,40 +21,45 @@ const itemsOrder = [
 ];
 
 function Filters({ isHidden }) {
-  const {
+  const dispatch = useDispatch();
+  /*const {
     checked: proiritySeachEnable,
     bind: proiritySeachEnableBind
+  } = useCheckbox(false);*/
+  const {
+    checked: groupSearchEnable,
+    bind: groupSeachEnableBind
   } = useCheckbox(false);
-  const { checked: groupSeachEnable, bind: groupSeachEnableBind } = useCheckbox(
-    false
-  );
 
-  const { checked: groupSeachByName, bind: groupSeachByNameBind } = useCheckbox(
-    false
-  );
   const {
-    checked: groupSeachByGenre,
-    bind: groupSeachByGenreBind
-  } = useCheckbox(false);
+    checked: groupSearchByName,
+    bind: groupSearchByNameBind
+  } = useCheckbox(false, 'title');
   const {
-    checked: groupSeachByDirector,
-    bind: groupSeachByDirectorBind
-  } = useCheckbox(false);
+    checked: groupSearchByGenre,
+    bind: groupSearchByGenreBind
+  } = useCheckbox(false, 'genres');
   const {
-    checked: groupSeachByActor,
-    bind: groupSeachByActorBind
-  } = useCheckbox(false);
+    checked: groupSearchByDirector,
+    bind: groupSearchByDirectorBind
+  } = useCheckbox(false, 'director');
   const {
-    checked: groupSeachByAnnotation,
+    checked: groupSearchByActor,
+    bind: groupSearchByActorBind
+  } = useCheckbox(false, 'top3Cast');
+  const {
+    checked: groupSearchByAnnotation,
     bind: groupSeachByAnnotationBind
-  } = useCheckbox(false);
+  } = useCheckbox(false, 'storyline');
   const {
-    checked: groupSeachBySynopsis,
-    bind: groupSeachBySynopsisBind
-  } = useCheckbox(false);
+    checked: groupSearchBySynopsis,
+    bind: groupSearchBySynopsisBind
+  } = useCheckbox(false, 'synopsis');
 
-  const items = useRef();
-  useEffect(() => {
+  useEffect(() => {}, []);
+
+  //const items = useRef();
+  /*useEffect(() => {
     const sortable = Sortable.create(items.current, {
       animation: 150,
 
@@ -62,7 +70,7 @@ function Filters({ isHidden }) {
     return () => {
       sortable.destroy();
     };
-  }, []);
+  }, []);*/
 
   return (
     <aside
@@ -73,147 +81,49 @@ function Filters({ isHidden }) {
       </div>
 
       <form className="card-body">
-        {/* Priority search filter */}
-        <div className="mb-2">
-          <div className="togglebutton">
-            <label
-              htmlFor="priorityFiltersGroupControl"
-              data-toggle="collapse"
-              data-target="#priorityFiltersGroup"
-              aria-expanded="false"
-              aria-controls="priorityFiltersGroup">
-              Enable priority search{' '}
-              <input
-                {...proiritySeachEnableBind}
-                id="priorityFiltersGroupControl"
-                type="checkbox"
-              />
-              <span className="ml-1 toggle"></span>
-            </label>
-          </div>
-
-          <fieldset className="collapse" id="priorityFiltersGroup">
-            <ul ref={items}>
-              <li>Название</li>
-              <li>Жанр</li>
-              <li>Режиссер</li>
-              <li>Актеры</li>
-              <li>Аннотация</li>
-              <li>Синопсис</li>
-            </ul>
-          </fieldset>
-        </div>
-
         {/* Group by filters */}
         <div className="mb-2">
-          <div className="togglebutton">
-            <label
-              htmlFor="groupFiltersGroupControl"
-              data-toggle="collapse"
-              data-target="#groupFiltersGroup"
-              aria-expanded="false"
-              aria-controls="groupFiltersGroup">
-              Enable fields group{' '}
-              <input
-                {...groupSeachEnableBind}
-                id="groupFiltersGroupControl"
-                type="checkbox"
+          <ToggleButton
+            id="groupFiltersGroupControl"
+            target="#groupFiltersGroup"
+            controls="groupFiltersGroup"
+            label="Enable fields group"
+            bind={groupSeachEnableBind}
+          />
+          {groupSearchEnable ? (
+            <fieldset id="groupFiltersGroup">
+              <Checkbox
+                bind={groupSearchByNameBind}
+                label="Название"
+                value="name"
               />
-              <span className="ml-1 toggle"></span>
-            </label>
-          </div>
-
-          <fieldset className="collapse" id="groupFiltersGroup">
-            <div className="form-check">
-              <label className="form-check-label">
-                <input
-                  {...groupSeachByNameBind}
-                  className="form-check-input"
-                  type="checkbox"
-                  value="name"
-                />
-                Название
-                <span className="form-check-sign">
-                  <span className="check"></span>
-                </span>
-              </label>
-            </div>
-
-            <div className="form-check">
-              <label className="form-check-label">
-                <input
-                  {...groupSeachByGenreBind}
-                  className="form-check-input"
-                  type="checkbox"
-                  value="genres"
-                />
-                Жанр
-                <span className="form-check-sign">
-                  <span className="check"></span>
-                </span>
-              </label>
-            </div>
-
-            <div className="form-check">
-              <label className="form-check-label">
-                <input
-                  {...groupSeachByDirectorBind}
-                  className="form-check-input"
-                  type="checkbox"
-                  value="director"
-                />
-                Режиссер
-                <span className="form-check-sign">
-                  <span className="check"></span>
-                </span>
-              </label>
-            </div>
-
-            <div className="form-check">
-              <label className="form-check-label">
-                <input
-                  {...groupSeachByActorBind}
-                  className="form-check-input"
-                  type="checkbox"
-                  value="actors"
-                />
-                Актеры
-                <span className="form-check-sign">
-                  <span className="check"></span>
-                </span>
-              </label>
-            </div>
-
-            <div className="form-check">
-              <label className="form-check-label">
-                <input
-                  {...groupSeachByAnnotationBind}
-                  className="form-check-input"
-                  type="checkbox"
-                  value="annotation"
-                />
-                Аннотация
-                <span className="form-check-sign">
-                  <span className="check"></span>
-                </span>
-              </label>
-            </div>
-
-            <div className="form-check">
-              <label className="form-check-label">
-                <input
-                  {...groupSeachBySynopsisBind}
-                  className="form-check-input"
-                  type="checkbox"
-                  value="synopsis"
-                />
-                Синопсис
-                <span className="form-check-sign">
-                  <span className="check"></span>
-                </span>
-              </label>
-            </div>
-          </fieldset>
+              <Checkbox
+                bind={groupSearchByGenreBind}
+                label="Жанр"
+                value="genres"
+              />
+              <Checkbox
+                bind={groupSearchByDirectorBind}
+                label="Режиссер"
+                value="director"
+              />
+              <Checkbox
+                bind={groupSearchByActorBind}
+                label="Актеры"
+                value="actors"
+              />
+              <Checkbox
+                bind={groupSeachByAnnotationBind}
+                label="Аннотация"
+                value="annotation"
+              />
+              <Checkbox
+                bind={groupSearchBySynopsisBind}
+                label="Синопсис"
+                value="synopsis"
+              />
+            </fieldset>
+          ) : null}
         </div>
       </form>
     </aside>

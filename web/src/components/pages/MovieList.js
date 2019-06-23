@@ -5,60 +5,20 @@ import SearchForm from '../SearchForm';
 import MovieTable from '../MovieTable';
 import useInput from '../../hooks/useInput';
 import { getResults } from '../../actions/search';
-import { resultsSelector } from '../../selectors/search';
-
-const fakeMovieList = [
-  {
-    id: 1,
-    title: 'Edison Kinetoscopic Record of a Sneeze',
-    year: 1894,
-    rating: 5.6,
-    genres: ['Documentary', 'Short'],
-    directors: ['William K.L. Dickson'],
-    release_dates: undefined,
-    top_3_cast: undefined,
-    storyline:
-      "A man (Thomas Edison's assistant) takes a pinch of snuff and sneezes. This is one of the earliest Thomas Edison films and was the first motion picture to be copyrighted in the United States.",
-    synopsis: null,
-    imdbId: '0000008',
-    sponsored: true
-  },
-  {
-    id: 2,
-    title: 'Полная кружка пива',
-    year: 1892,
-    rating: 6.3,
-    genres: ['Animation', 'Short'],
-    directors: ['Émile Reynaud'],
-    release_dates: undefined,
-    top_3_cast: undefined,
-    storyline: null,
-    synopsis: null,
-    imdbId: '0000004'
-  },
-  {
-    id: 3,
-    title: 'The Toxic Avenger',
-    year: 1984,
-    rating: 6.3,
-    genres: ['Action', 'Comedy', 'Horror'],
-    directors: [' Michael Herz', 'Lloyd Kaufman (as Samuel Weil)'],
-    release_dates: undefined,
-    top_3_cast: [' Andree Maranda', 'Mitch Cohen', 'Jennifer Babtist'],
-    storyline:
-      'Tromaville has a monstrous new hero. The Toxic Avenger is born when meek mop boy Melvin falls into a vat of toxic waste. Now evildoers will have a lot to lose.',
-    synopsis: null,
-    imdbId: '0090190'
-  }
-];
+import {
+  resultsSelector,
+  boostingFieldsSelector
+} from '../../selectors/search';
 
 export default function MovieList() {
+  const dispatch = useDispatch();
+
   const [filtersVisibility, filtersVisibilitySet] = useState(false);
   const toggleFilters = () => filtersVisibilitySet(!filtersVisibility);
 
+  const boostingFields = useSelector(boostingFieldsSelector);
   const results = useSelector(resultsSelector);
 
-  const dispatch = useDispatch();
   const { value, bind } = useInput('');
 
   const submitHandler = (e) => {
@@ -66,7 +26,8 @@ export default function MovieList() {
     if (value)
       dispatch(
         getResults.request({
-          query: value
+          query: value,
+          boostingFields
         })
       );
   };

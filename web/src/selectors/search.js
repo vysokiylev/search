@@ -8,3 +8,6 @@ export const movieSelector = (movieId) =>
     resultsSelector,
     (results) => results.find((movie) => movie.id === movieId)
   );
+
+export const boostingFieldsSelector = (state) =>
+  searchStateSelector(state).boostingFields;
