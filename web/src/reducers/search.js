@@ -1,7 +1,8 @@
 import {
   getResults,
   addBoostingField,
-  removeBoostingField
+  removeBoostingField,
+  resetBoostingFields
 } from '../actions/search';
 
 const initialState = {
@@ -32,6 +33,11 @@ export default function SearchReducer(state = initialState, action) {
       return {
         ...state,
         boostingFields
+      };
+    case resetBoostingFields.REQUEST:
+      return {
+        ...state,
+        boostingFields: []
       };
     default:
       return state;

@@ -6,6 +6,7 @@ import useCheckbox from '../../hooks/useCheckbox';
 import './filters.css';
 import ToggleButton from '../common/toggle-button';
 import Checkbox from '../common/checkbox';
+import { resetBoostingFields } from '../../actions/search';
 
 function reorder(array, from, to) {
   array.splice(to, 0, array.splice(from, 1)[0]);
@@ -56,7 +57,9 @@ function Filters({ isHidden }) {
     bind: groupSearchBySynopsisBind
   } = useCheckbox(false, 'synopsis');
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (!groupSearchEnable) dispatch(resetBoostingFields.request());
+  }, [groupSearchEnable]);
 
   //const items = useRef();
   /*useEffect(() => {
