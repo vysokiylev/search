@@ -1,16 +1,6 @@
-import { call, spawn } from 'redux-saga/effects';
+import { all } from 'redux-saga/effects';
+import search from './search';
 
 export default function*() {
-  yield [
-    // здесь будут саги
-  ].map((saga) =>
-    spawn(function*() {
-      while (true)
-        try {
-          yield call(saga);
-        } catch (error) {
-          console.error(error);
-        }
-    })
-  );
+  yield all([search()]);
 }

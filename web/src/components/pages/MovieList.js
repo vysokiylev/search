@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
-import Filters from '../components/Filters';
-import SearchForm from '../components/SearchForm';
-import MovieTable from '../components/MovieTable';
-import useInput from '../hooks/useInput';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Filters from '../filters';
+import SearchForm from '../SearchForm';
+import MovieTable from '../MovieTable';
+import useInput from '../../hooks/useInput';
+import { getResults } from '../../actions/search';
+import { resultsSelector } from '../../selectors/search';
 
 const fakeMovieList = [
   {
@@ -14,7 +17,8 @@ const fakeMovieList = [
     directors: ['William K.L. Dickson'],
     release_dates: undefined,
     top_3_cast: undefined,
-    storyline: "A man (Thomas Edison's assistant) takes a pinch of snuff and sneezes. This is one of the earliest Thomas Edison films and was the first motion picture to be copyrighted in the United States.",
+    storyline:
+      "A man (Thomas Edison's assistant) takes a pinch of snuff and sneezes. This is one of the earliest Thomas Edison films and was the first motion picture to be copyrighted in the United States.",
     synopsis: null,
     imdbId: '0000008',
     sponsored: true
@@ -30,7 +34,7 @@ const fakeMovieList = [
     top_3_cast: undefined,
     storyline: null,
     synopsis: null,
-    imdbId: '0000004',
+    imdbId: '0000004'
   },
   {
     id: 3,
@@ -41,22 +45,31 @@ const fakeMovieList = [
     directors: [' Michael Herz', 'Lloyd Kaufman (as Samuel Weil)'],
     release_dates: undefined,
     top_3_cast: [' Andree Maranda', 'Mitch Cohen', 'Jennifer Babtist'],
-    storyline: 'Tromaville has a monstrous new hero. The Toxic Avenger is born when meek mop boy Melvin falls into a vat of toxic waste. Now evildoers will have a lot to lose.',
+    storyline:
+      'Tromaville has a monstrous new hero. The Toxic Avenger is born when meek mop boy Melvin falls into a vat of toxic waste. Now evildoers will have a lot to lose.',
     synopsis: null,
-    imdbId: '0090190',
-  },
-]
+    imdbId: '0090190'
+  }
+];
 
 export default function MovieList() {
+  const [filtersVisibility, filtersVisibilitySet] = useState(false);
+  const toggleFilters = () => filtersVisibilitySet(!filtersVisibility);
 
-  const [filtersVisibility, filtersVisibilitySet] = useState(false)
-  const toggleFilters = () => filtersVisibilitySet(!filtersVisibility)
+  const results = useSelector(resultsSelector);
 
-  const { value, bind } = useInput('')
+  const dispatch = useDispatch();
+  const { value, bind } = useInput('');
 
-  const submitHandler = e => {
-    e.preventDefault()
-  }
+  const submitHandler = (e) => {
+    e.preventDefault();
+    if (value)
+      dispatch(
+        getResults.request({
+          query: value
+        })
+      );
+  };
 
   return (
     <main>
@@ -64,24 +77,21 @@ export default function MovieList() {
         <div className="row no-gutters">
           {/* search & table */}
           <div className="col">
-
             <SearchForm bind={bind} submitHandler={submitHandler} />
             <div className="row no-gutters">
               <p>Description and example of query</p>
 
               <div className="ml-auto">
-                <button className="btn btn-primary"
-                  onClick={toggleFilters}
-                ><i className="material-icons">color_lens</i> {filtersVisibility ? "Close" : "Filters"}</button>
+                <button className="btn btn-primary" onClick={toggleFilters}>
+                  <i className="material-icons">color_lens</i>{' '}
+                  {filtersVisibility ? 'Close' : 'Filters'}
+                </button>
               </div>
             </div>
 
             <h2>Movies list</h2>
 
-            <MovieTable>
-              {fakeMovieList}
-            </MovieTable>
-
+            <MovieTable>{results}</MovieTable>
           </div>
 
           {/* filters */}
@@ -91,5 +101,5 @@ export default function MovieList() {
         </div>
       </div>
     </main>
-  )
+  );
 }

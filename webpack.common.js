@@ -1,5 +1,9 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const dotenv = require('dotenv');
+const webpack = require('webpack');
+
+dotenv.config();
 
 module.exports = {
   output: {
@@ -12,7 +16,7 @@ module.exports = {
         loader: 'file-loader'
       },
       {
-        test: /\.(svg|png|jpg|jpeg|gif)$/,
+        test: /\.(svg|png|jpg|jpeg|gif|cur)$/,
         use: [
           'file-loader',
           {
@@ -39,6 +43,9 @@ module.exports = {
     ]
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env.API_URL': JSON.stringify(process.env.API_URL)
+    }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, `./web/src/index.html`),
       //favicon: path.join(__dirname, "./src/web/favicon.ico"),

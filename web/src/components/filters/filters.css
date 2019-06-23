@@ -1,0 +1,10 @@
+.filters {
+  width: 300px;
+  transition: right 0.3s ease-in, width 0.2s ease-in;
+  white-space: nowrap;
+}
+
+.filters.hidden {
+  width: 0;
+  height: 0;
+}

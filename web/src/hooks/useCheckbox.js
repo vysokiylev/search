@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-export const useCheckbox = initialChecked => {
+export const useCheckbox = (initialChecked) => {
   const [checked, setChecked] = useState(initialChecked);
 
   return {
@@ -9,11 +9,11 @@ export const useCheckbox = initialChecked => {
     reset: () => setChecked(false),
     bind: {
       checked,
-      onChange: event => {
-        setChecked(event.target.checked);
+      onChange: (e) => {
+        setChecked(e.target.checked);
       }
     }
   };
 };
 
-export default useCheckbox
+export default useCheckbox;

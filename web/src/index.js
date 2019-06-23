@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { HashRouter, Route } from 'react-router-dom';
 import store from './store';
-import Root from './pages';
+import Root from './components/pages';
 
 render(
   <Provider store={store}>
